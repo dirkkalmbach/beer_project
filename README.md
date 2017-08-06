@@ -24,7 +24,7 @@ To open and modify this application, you need to run a web server and a web app 
 # What can I do with it?
 You can use the application for your own purpose, e.g.:
 
-- Alter the code *database_setup.py* to create your own catalog-item-project. The database consists of 3 Tables: *category, item, user* with the corresponding Classes *Category, Item, User* in *database_setup.p<*.
+- Alter the code *database_setup.py* to create your own catalog-item-project. The database consists of 3 Tables: *category, item, user* with the corresponding Classes *Category, Item, User* in *database_setup.py*.
 
 - Alter the code in *application.py*. This is the main file server-side connecting to the database and rendering the html-sites client-side.
 
@@ -32,29 +32,29 @@ You can use the application for your own purpose, e.g.:
 
 The Folder structure looks like this:
 
-beer_project/
-├── vagrant/
-│   ├── application.py
-│   ├── database_setup.py 
-│   ├── database_filling.py *(initial filling the db with entries)*
-│   ├── beermenuwithusers.db *(created afterrunning database_setup.py)*
-│   ├── client_secret.json *(for Google oAuth)*
-│   ├── templates/
-│   │    ├── index.html *(logged in)*
-│   │    ├── publicindex.html *(not logged in)*
-│   │    ├── catalog.html *(renders depending on login-status)*
-│   │    ├── item.html *(renders depending on login-status)*
-│   │    ├── login.html
-│   │    ├── additem.html *(logged in)*
-│   │    ├── edititem.html *(logged in)*
-│   │    ├── deleteitem.html *(logged in)*
-│   │    ├── main.html *(<head> element for all other html-sites)*
-│   │    ├── header.html *(html-elements for logged-in sites)*
-│   │    └── publicheader.html *(html-elements for public sites)*
-│   ├── static/
-│   │    └── styles.css
-│   └── vagrantfile *(contains the Vagrant VM data)*
-└── README.md *(this file)*
+beer_project/    
+├── vagrant/   
+│   ├── application.py   
+│   ├── database_setup.py     
+│   ├── database_filling.py *(initial filling the db with entries)*   
+│   ├── beermenuwithusers.db *(created afterrunning database_setup.py)*    
+│   ├── client_secret.json *(for Google oAuth)*  
+│   ├── templates/  
+│   │    ├── index.html *(logged in)*  
+│   │    ├── publicindex.html *(not logged in)*  
+│   │    ├── catalog.html *(renders depending on login-status)*  
+│   │    ├── item.html *(renders depending on login-status)*  
+│   │    ├── login.html  
+│   │    ├── additem.html *(logged in)*  
+│   │    ├── edititem.html *(logged in)*  
+│   │    ├── deleteitem.html *(logged in)*  
+│   │    ├── main.html *(<head> element for all other html-sites)*  
+│   │    ├── header.html *(html-elements for logged-in sites)*  
+│   │    └── publicheader.html *(html-elements for public sites)*  
+│   ├── static/  
+│   │    └── styles.css  
+│   └── vagrantfile *(contains the Vagrant VM data)*  
+└── README.md *(this file)*  
 
 
 # References
