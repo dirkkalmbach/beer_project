@@ -1,5 +1,5 @@
 
-*This Project is part of the [Udacity Full Stack Web Devoloper Nanodegree](https://www.udacity.com/course/full-stack-web-developer-nanodegree--nd004).* It consists of an application which provides a list of items within a variety of beer categories as well as a user registration and authentication system. Registered users will have the ability to post, edit and delete their own items.
+This Project is part of the *[Udacity Full Stack Web Devoloper Nanodegree](https://www.udacity.com/course/full-stack-web-developer-nanodegree--nd004).* It consists of an application which provides a list of items within a variety of beer categories as well as a user registration and authentication system. Registered users will have the ability to post, edit and delete their own items.
 
 # How to run
 ## Prerequisite: Install the Vagrant VM
