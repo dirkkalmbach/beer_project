@@ -236,11 +236,6 @@ def itemDescriptionJSON(category_id, item_id):
 
 
 
-
-
-################## Add new item
-
-
 @app.route('/additem', methods=['GET', 'POST'])
 def addItem():
     # Check if user is logged in
@@ -258,9 +253,12 @@ def addItem():
             # Get Category Name for selected category via Category ID
             category_id = request.form['category_dropdown']
             category_name = session.query(Category).filter_by(id=category_id).one().name
+            user_id = getUserID(login_session['email'])
             new_item = Item(name=request.form['title'], 
                             description=request.form['description'], 
-                            cat_id=request.form['category_dropdown'])
+                            cat_id=request.form['category_dropdown'],
+                            user_id=user_id)
+           
             session.add(new_item)
             session.commit()
 
@@ -271,29 +269,20 @@ def addItem():
             error='Sorry, You have to chose a name for Your beer!'
         
     return render_template('additem.html', categories=categories, error=error)
-    #return request.form['category_dropdown']
-    #return "adding item"
 
-
-
-
-##################
 @app.route('/addcategory', methods=['GET', 'POST'])
 def addCategory():
     # Check if user is logged in
     if 'username' not in login_session:
         return redirect('/login')
-
-
-    #categories = session.query(Category).order_by(asc(Category.name)).all()
     
     error = None
 
     if request.method == 'POST':
         if request.form['title'] != "":
 
-            
-            new_cateogry = Category(name=request.form['title'])
+            user_id = getUserID(login_session['email'])
+            new_cateogry = Category(name=request.form['title'], user_id=user_id)
             
             session.add(new_cateogry)
             session.commit()
