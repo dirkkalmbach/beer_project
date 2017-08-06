@@ -1,9 +1,11 @@
 
+*This Project is part of the [Udacity Full Stack Web Devoloper Nanodegree](https://www.udacity.com/course/full-stack-web-developer-nanodegree--nd004) which I took in 2017.*
+
 # How to run
-## Prereqresite: Install the Vagrant VM
+## Prerequisite: Install the Vagrant VM
 To open and modify this application, you need to run a web server and a web app that uses it. The Vagrant VM is a Linux system that runs on top of your own machine. For this you have to download and install VirtualBox and Vagrant:
 
-###VirtualBox
+### irtualBox
 VirtualBox is the software that actually runs the VM. [You can download it from virtualbox.org, here](https://www.virtualbox.org/wiki/Downloads). Install the platform package for your operating system. You do not need the extension pack or the SDK. You do not need to launch VirtualBox after installing it.
 
 *Ubuntu 14.04 Note: If you are running Ubuntu 14.04, install VirtualBox using the Ubuntu Software Center, not the virtualbox.org web site. Due to a reported [bug](https://ubuntuforums.org/showthread.php?t=2227131), installing VirtualBox from the site may uninstall other software you need.*

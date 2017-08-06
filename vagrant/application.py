@@ -235,6 +235,14 @@ def itemDescription(item_id, category_id):
     else:
         return render_template('item.html', item=item)
 
+# JSON APIs to view Item Description
+@app.route('/catalog/<category_id>/<item_id>/JSON')
+@app.route('/catalog/<category_id>/<item_id>/json')
+def itemDescriptionJSON(category_id, item_id):
+    item = session.query(Item).filter_by(id=item_id).one()
+    return jsonify(item=item.serialize)
+
+
 @app.route('/catalog/<item_id>/edit', methods=['GET', 'POST'])
 def editItem(item_id):
     # Check if user is logged in
