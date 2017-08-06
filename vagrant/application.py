@@ -184,16 +184,18 @@ def gdisconnect():
 @app.route('/')
 @app.route('/index')
 def index():
-
-    # Query database
-    categories = session.query(Category).order_by(asc(Category.name)).all()
-    items = session.query(Item).order_by(desc(Item.id)).limit(7)
-
     # Check if user is logged in
     if 'username' not in login_session:
+        categories = session.query(Category).order_by(asc(Category.name)).all()
+        items = session.query(Item).order_by(desc(Item.id)).limit(7)
         return render_template('publicindex.html', categories=categories,
                                items=items)
-    else:
+    else:  # user logged in
+        user_id = getUserID(login_session['email'])
+        categories = session.query(Category).filter_by(
+            user_id=user_id).order_by(asc(Category.name)).all()
+        items = session.query(Item).filter_by(
+            user_id=user_id).order_by(desc(Item.id)).limit(7)
         return render_template('index.html', categories=categories,
                                items=items)
 
@@ -203,17 +205,31 @@ def showItemsOfCategory(category_id):
     # Check if user is logged in
     if 'username' not in login_session:
         headertype = 'publicheader.html'
-    else:
+        categories = session.query(Category).order_by(asc(Category.name)).all()
+        category = session.query(Category).filter_by(id=category_id).one()
+        counts = session.query(Item).filter_by(cat_id=category_id).count()
+        items = session.query(Item).filter_by(cat_id=category_id).all()
+        return render_template('catalog.html', headertype=headertype,
+                               categories=categories, category=category,
+                               n=counts, items=items)
+    else:  # user logged in
         headertype = 'header.html'
+        user_id = getUserID(login_session['email'])
+        categories = session.query(Category).filter_by(
+            user_id=user_id).order_by(asc(Category.name)).all()
+        counts = session.query(Item).filter_by(
+            cat_id=category_id, user_id=user_id).count()
+        try:  # check if user has made at least one category entry
+            category = session.query(Category).filter_by(
+                id=category_id, user_id=user_id).one()
+        except:
+            category = None
+        items = session.query(Item).filter_by(
+            cat_id=category_id, user_id=user_id).all()
 
-    # Query database
-    categories = session.query(Category).order_by(asc(Category.name)).all()
-    category = session.query(Category).filter_by(id=category_id).one()
-    counts = session.query(Item).filter_by(cat_id=category_id).count()
-    items = session.query(Item).filter_by(cat_id=category_id).all()
-    return render_template('catalog.html', headertype=headertype,
-                           categories=categories, category=category,
-                           n=counts, items=items)
+        return render_template('catalog.html', headertype=headertype,
+                               categories=categories, category=category,
+                               n=counts, items=items)
 
 
 @app.route('/catalog/<category_id>/<item_id>/')
@@ -227,13 +243,13 @@ def itemDescription(item_id, category_id):
     else:
         return render_template('item.html', item=item)
 
+
 # JSON APIs to view Item Description
 @app.route('/catalog/<category_id>/<item_id>/JSON')
 @app.route('/catalog/<category_id>/<item_id>/json')
 def itemDescriptionJSON(category_id, item_id):
     item = session.query(Item).filter_by(id=item_id).one()
     return jsonify(item=item.serialize)
-
 
 
 @app.route('/additem', methods=['GET', 'POST'])
@@ -254,47 +270,42 @@ def addItem():
             category_id = request.form['category_dropdown']
             category_name = session.query(Category).filter_by(id=category_id).one().name
             user_id = getUserID(login_session['email'])
-            new_item = Item(name=request.form['title'], 
-                            description=request.form['description'], 
+            new_item = Item(name=request.form['title'],
+                            description=request.form['description'],
                             cat_id=request.form['category_dropdown'],
-                            user_id=user_id)
-           
+                            user_id=user_id)   
             session.add(new_item)
             session.commit()
 
             return redirect(url_for('index'))
-            #return new_item
-            
         else:
-            error='Sorry, You have to chose a name for Your beer!'
-        
+            error = 'Sorry, You have to chose a Name for Your Beer!'
+
     return render_template('additem.html', categories=categories, error=error)
+
 
 @app.route('/addcategory', methods=['GET', 'POST'])
 def addCategory():
     # Check if user is logged in
     if 'username' not in login_session:
         return redirect('/login')
-    
+
     error = None
 
     if request.method == 'POST':
         if request.form['title'] != "":
 
             user_id = getUserID(login_session['email'])
-            new_cateogry = Category(name=request.form['title'], user_id=user_id)
-            
+            new_cateogry = Category(name=request.form['title'],
+                                    user_id=user_id)
             session.add(new_cateogry)
             session.commit()
 
             return redirect(url_for('index'))
-           
-            
         else:
-            error='Sorry, You have to chose a name for the category!'
-        
-    return render_template('addcategory.html', error=error)
+            error = 'Sorry, You have to chose a Name for the Category!'
 
+    return render_template('addcategory.html', error=error)
 
 
 @app.route('/catalog/<item_id>/edit', methods=['GET', 'POST'])
@@ -318,18 +329,18 @@ def editItem(item_id):
             item.description = request.form['description']
             # Change category via category_id
             category_id = request.form['category_dropdown']
-            category_newname = session.query(Category).filter_by(id=category_id).one().name
+            category_newname = session.query(Category).filter_by(
+                id=category_id).one().name
             category.name = category_newname
-            
             session.add(item)
             session.add(category)
             session.commit()
             return redirect(url_for('index'))
-            
         else:
-            error='Sorry, You have to chose a name for Your beer!'
-        
-    return render_template('edititem.html', item=item, categories=categories, error=error)
+            error = 'Sorry, You have to Chose a Name for Your Beer!'
+
+    return render_template('edititem.html', item=item,
+                           categories=categories, error=error)
 
 
 @app.route('/catalog/<item_id>/delete', methods=['GET', 'POST'])
@@ -337,7 +348,7 @@ def deleteItem(item_id):
     if 'username' not in login_session:
         return redirect('/login')
     item = session.query(Item).filter_by(id=item_id).one()
-    if request.method == 'POST':    
+    if request.method == 'POST':
         session.delete(item)
         session.commit()
         return redirect(url_for('index'))
@@ -349,3 +360,4 @@ if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=8000)
+    

@@ -24,10 +24,9 @@
               <select name="category_dropdown">
               {% for i in categories %}
                 <option value='{{i.id}}'> {{i.name}}</option>
-              {% endfor %}
-      
-               
-              </select><br><br>
+              {% endfor %}             
+              </select><br>
+              <i>If your category is not in the list, feel to <a href='{{url_for('addCategory') }}'><i>add a new one</i></a>.</i><br><br>
               <input type='submit' value='add'>
             </form>
 
