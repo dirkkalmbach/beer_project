@@ -1,0 +1,38 @@
+{% extends "main.html" %}
+{% block content %}
+{% include 'header.html' %}
+
+      <div class="row">
+        <div class="col-md-12">
+      </div>
+      </div class="row">
+        <div class="col-md-12">
+      </div>
+      
+      <div class="row">
+        <div class="col-md-12">
+            <h2>Add Item</h2>
+            <br>
+            <form action="{{url_for('addItem')}}" method = 'POST'>
+              <p>Name of the Beer:</p>
+              {% if error %}<p id="error_message">{{ error }}</p>{% endif %}
+              <input type='text' size='30' name='title'><br><br>
+              <p>Description:</p>
+              <textarea name='description' cols="60" rows="4"></textarea> <br><br>
+              
+              <p>Category:</p>
+              <select name="category_dropdown">
+              {% for i in categories %}
+                <option value='{{i.id}}'> {{i.name}}</option>
+              {% endfor %}
+      
+               
+              </select><br><br>
+              <input type='submit' value='add'>
+            </form>
+
+            
+        </div>
+      </div>
+
+{% endblock %}
