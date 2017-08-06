@@ -30,3 +30,8 @@ print("******** ITEMS *************")
 items = session.query(Item).all()
 for i in items:
 	print(i.name, i.id, i.user_id) #i.description
+
+# Print all entries of User with id=2
+user_id = 2
+categories = session.query(Category).filter_by(id=user_id).order_by(asc(Category.name)).all()
+        items = session.query(Item).filter_by(id=user_id).order_by(desc(Item.id)).limit(7)

@@ -315,7 +315,8 @@ def editItem(item_id):
 
     # Query database
     categories = session.query(Category).order_by(asc(Category.name)).all()
-    error = None
+    error_user = None
+    error_title = None
     # Find item
     item = session.query(Item).filter_by(id=item_id).one()
     category_id = session.query(Item).filter_by(id=item_id).one().cat_id
@@ -323,36 +324,48 @@ def editItem(item_id):
 
     # Change Item
     if request.method == 'POST':
+        # Check if title is not empty
         if request.form['title'] != "":
-            item.name = request.form['title']
-            item.description = request.form['description']
-            # Change category via category_id
-            category_id = request.form['category_dropdown']
-            category_newname = session.query(Category).filter_by(
-                id=category_id).one().name
-            category.name = category_newname
-            session.add(item)
-            session.add(category)
-            session.commit()
-            return redirect(url_for('index'))
+            # check if item to edit is created by user
+            if item.user_id == getUserID(login_session['email']):
+                item.name = request.form['title']
+                item.description = request.form['description']
+                # Change category via category_id
+                category_id = request.form['category_dropdown']
+                category_newname = session.query(Category).filter_by(
+                    id=category_id).one().name
+                category.name = category_newname
+                session.add(item)
+                session.add(category)
+                session.commit()
+                return redirect(url_for('index'))
+            else:
+                error_user = 'Sorry, You are only allowed to edit your own items'
+
         else:
-            error = 'Sorry, You have to Chose a Name for Your Beer!'
+            error_title = 'Sorry, You have to Chose a Name for Your Beer!'
 
     return render_template('edititem.html', item=item,
-                           categories=categories, error=error)
+                           categories=categories, error_title=error_title, error_user=error_user)
 
 
 @app.route('/catalog/<item_id>/delete', methods=['GET', 'POST'])
 def deleteItem(item_id):
+    error_user = None
     if 'username' not in login_session:
         return redirect('/login')
     item = session.query(Item).filter_by(id=item_id).one()
     if request.method == 'POST':
-        session.delete(item)
-        session.commit()
-        return redirect(url_for('index'))
+        # check if item to edit is created by user
+        if item.user_id == getUserID(login_session['email']):
+            session.delete(item)
+            session.commit()
+            return redirect(url_for('index'))
+        else:
+                error_user = 'Sorry, You are only allowed to delete your own items!'
+                return render_template('deletetitem.html', error_user=error_user, item=item)
     else:
-        return render_template('deletetitem.html', item=item)
+        return render_template('deletetitem.html', error_user=error_user, item=item)
 
 
 if __name__ == '__main__':

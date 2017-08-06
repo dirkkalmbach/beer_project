@@ -14,7 +14,7 @@
               <p>Are you sure you want to delete {{item.name}}?</p>
               <input type='submit' value='delete'>
             </form>
-
+            <br>{% if error_user %}<p id="error_message">{{ error_user }}</p>{% endif %}
             
         </div>
       </div>
