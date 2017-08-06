@@ -192,8 +192,7 @@ def index():
                                items=items)
     else:  # user logged in
         user_id = getUserID(login_session['email'])
-        categories = session.query(Category).filter_by(
-            user_id=user_id).order_by(asc(Category.name)).all()
+        categories = session.query(Category).order_by(asc(Category.name)).all()
         items = session.query(Item).filter_by(
             user_id=user_id).order_by(desc(Item.id)).limit(7)
         return render_template('index.html', categories=categories,
@@ -360,4 +359,3 @@ if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=8000)
-    
