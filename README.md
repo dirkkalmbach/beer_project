@@ -1,11 +1,11 @@
 
-*This Project is part of the [Udacity Full Stack Web Devoloper Nanodegree](https://www.udacity.com/course/full-stack-web-developer-nanodegree--nd004) which I took in 2017.*
+*This Project is part of the [Udacity Full Stack Web Devoloper Nanodegree](https://www.udacity.com/course/full-stack-web-developer-nanodegree--nd004).* It consists of an application which provides a list of items within a variety of beer categories as well as a user registration and authentication system. Registered users will have the ability to post, edit and delete their own items.
 
 # How to run
 ## Prerequisite: Install the Vagrant VM
 To open and modify this application, you need to run a web server and a web app that uses it. The Vagrant VM is a Linux system that runs on top of your own machine. For this you have to download and install VirtualBox and Vagrant:
 
-### irtualBox
+### VirtualBox
 VirtualBox is the software that actually runs the VM. [You can download it from virtualbox.org, here](https://www.virtualbox.org/wiki/Downloads). Install the platform package for your operating system. You do not need the extension pack or the SDK. You do not need to launch VirtualBox after installing it.
 
 *Ubuntu 14.04 Note: If you are running Ubuntu 14.04, install VirtualBox using the Ubuntu Software Center, not the virtualbox.org web site. Due to a reported [bug](https://ubuntuforums.org/showthread.php?t=2227131), installing VirtualBox from the site may uninstall other software you need.*
@@ -20,9 +20,6 @@ Vagrant is the software that configures the VM and lets you share files between 
 2. Run the VM: using the terminal, change directory to beer_project using the command `cd <path to beer_project>`, then type `vagrant up` to launch your virtual machine.
 3. Running the App: type `vagrant ssh` to log into your VM (if you want to exit the VM, type `exit`). Now run the app by typing `python3 application.py`. Go to [localhost:8000](localhost:8000) and enjoy :-)
 
-# What can I do with it?
-
-...
 
 
 

@@ -1,30 +1,23 @@
 #!/usr/bin/env python3
 
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, make_response
+from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import jsonify, make_response
 from flask import session as login_session
-
 from sqlalchemy import create_engine, desc, asc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category, Item, User
-
 import random
 import string
-
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
 import json
 import requests
 
-
 app = Flask(__name__)
-
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
-
-APPLICATION_NAME = "Beer Catalog"
-
 
 engine = create_engine('sqlite:///beermenuwithusers.db')
 Base.metadata.bind = engine
@@ -33,15 +26,14 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 
-# Create anti-forgery state token
 @app.route('/login')
-
+# Create anti-forgery state token
 def showLogin():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in range(32))
     login_session['state'] = state
-    #return "The current session state is %s" % login_session['state']
     return render_template('login.html', STATE=state)
+
 
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
@@ -64,12 +56,12 @@ def gconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
-   # Check that the access token is valid.
+    # Check that the access token is valid.
     access_token = credentials.access_token
     url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
            % access_token)
     h = httplib2.Http()
-    result = json.loads( str(h.request(url, 'GET')[1].decode('utf-8')) )
+    result = json.loads(str(h.request(url, 'GET')[1].decode('utf-8')))
     # If there was an error in the access token info, abort.
     if result.get('error') is not None:
         response = make_response(json.dumps(result.get('error')), 500)
@@ -95,8 +87,8 @@ def gconnect():
     stored_access_token = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_access_token is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected.'),
-                                 200)
+        response = make_response(json.dumps(
+            'Current user is already connected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -118,8 +110,8 @@ def gconnect():
     # See if a user exists, if it doesn't make a new one
     user_id = getUserID(login_session['email'])
     if not user_id:
-      user_id = createUser(login_session)
-      login_session['user_id'] = user_id
+        user_id = createUser(login_session)
+        login_session['user_id'] = user_id
 
     output = ''
     output += '<h1>Welcome, '
@@ -132,8 +124,8 @@ def gconnect():
     print("done!")
     return output
 
-# User Helper Functions
 
+# User Helper Functions
 def createUser(login_session):
     newUser = User(name=login_session['username'], email=login_session[
                    'email'], picture=login_session['picture'])
@@ -189,8 +181,6 @@ def gdisconnect():
         return response
 
 
-
-
 @app.route('/')
 @app.route('/index')
 def index():
@@ -201,26 +191,30 @@ def index():
 
     # Check if user is logged in
     if 'username' not in login_session:
-        return render_template('publicindex.html', categories=categories, items=items)
+        return render_template('publicindex.html', categories=categories,
+                               items=items)
     else:
-        return render_template('index.html', categories=categories, items=items)
+        return render_template('index.html', categories=categories,
+                               items=items)
 
 
 @app.route('/catalog/<category_id>/items/', methods=['GET', 'POST'])
 def showItemsOfCategory(category_id):
     # Check if user is logged in
     if 'username' not in login_session:
-        headertype='publicheader.html'
+        headertype = 'publicheader.html'
     else:
-        headertype='header.html'
+        headertype = 'header.html'
 
     # Query database
     categories = session.query(Category).order_by(asc(Category.name)).all()
     category = session.query(Category).filter_by(id=category_id).one()
     counts = session.query(Item).filter_by(cat_id=category_id).count()
     items = session.query(Item).filter_by(cat_id=category_id).all()
-    return render_template('catalog.html', headertype=headertype, categories=categories, category=category, n=counts, items=items)
-    
+    return render_template('catalog.html', headertype=headertype,
+                           categories=categories, category=category,
+                           n=counts, items=items)
+
 
 @app.route('/catalog/<category_id>/<item_id>/')
 def itemDescription(item_id, category_id):
