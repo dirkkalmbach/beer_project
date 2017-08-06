@@ -1,0 +1,26 @@
+{% extends "main.html" %}
+{% block content %}
+{% include 'publicheader.html' %}
+
+      <div class="row">
+        <div class="col-md-12">
+          <h1>Beer App</h1>
+          <h3>find your favorite beer</h3>
+        </div>
+        
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+            <h2>{{item.name}}</h2>
+            <br>{{item.description}}</br>
+            
+        </div>
+      </div>
+
+{% endblock %}

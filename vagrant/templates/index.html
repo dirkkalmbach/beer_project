@@ -1,0 +1,33 @@
+{% extends "main.html" %}
+{% block content %}
+{% include headertype %}
+
+
+      <div class="row">
+        <div class="col-md-12">
+          <h1>Beer App</h1>
+          <h3>find your favorite beer</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+            <h2>Categories</h2>
+            {% for i in categories %}
+            <br><a href='{{url_for('showItemsOfCategory', category_id = i.id) }}'>{{i.name}}</a><br>
+          {% endfor %}
+          
+        </div>
+        <div class="col-md-9">
+          <h2>Latest Items</h2> 
+          {% for i in items %}
+            <br><a href='{{ url_for( 'itemDescription', category_id = i.cat_id, item_id = i.id) }}'>{{i.name}}</a> ({{i.category.name}})<br>
+            
+          {% endfor %}
+        </div>
+      </div>
+    
+{% endblock %}
