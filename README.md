@@ -1,6 +1,12 @@
 
 *This Project is part of the [Udacity Full Stack Web Devoloper Nanodegree](https://www.udacity.com/course/full-stack-web-developer-nanodegree--nd004).* It consists of an application which provides a list of items within a variety of beer categories as well as a user registration and authentication system. Registered users will have the ability to post, edit and delete their own items.
 
+![image of index.html](images/index.png)
+
+![image of /edit.html](images/edit.png)
+
+![image of /addcategory.html](images/addcategory.png)
+
 # How to run
 ## Prerequisite: Install the Vagrant VM
 To open and modify this application, you need to run a web server and a web app that uses it: *Vagrant Virtual Machine* The Vagrant VM is a Linux system that runs on top of your own machine. For this you have to download and install VirtualBox and Vagrant:
